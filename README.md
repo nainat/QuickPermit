@@ -1,3 +1,1 @@
-# Permissions# gdgoc
-# QuickPermit
 # QuickPermit
