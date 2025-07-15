@@ -3,14 +3,12 @@ const admin = require("firebase-admin");
 
 admin.initializeApp();
 
-// ✅ Firestore trigger: when a letter is approved/declined
 exports.notifyStudentOnApproval = functions.firestore
     .document("requests/{requestId}")
     .onUpdate(async (change, context) => {
       const before = change.before.data();
       const after = change.after.data();
 
-      // Only act if status changed
       if (before.status === after.status) return null;
 
       const status = after.status;
