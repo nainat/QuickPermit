@@ -1,8 +1,7 @@
-// summarizeRoute.js
 const express = require('express');
 const router = express.Router();
-const { generativeModel } = require('./vertexClient'); // Import generativeModel
-const pdf = require('pdf-parse'); // You'll need this in your backend as well
+const { generativeModel } = require('./vertexClient'); 
+const pdf = require('pdf-parse');
 
 router.post('/summarize', async (req, res) => {
   const { text } = req.body;
@@ -11,7 +10,6 @@ router.post('/summarize', async (req, res) => {
     return res.status(400).json({ error: "Text is required." });
   }
 
-  // Reuse your existing summarization logic for plain text
   try {
     const prompt = `Summarize the following text in a concise manner, focusing on key information and main points. Aim for 3-5 sentences.\n\nText: "${text}"`;
 
@@ -35,7 +33,6 @@ router.post('/summarize', async (req, res) => {
 });
 
 
-// --- NEW ROUTE FOR PDF SUMMARIZATION ---
 router.post('/summarize-pdf', async (req, res) => {
   const { fileBase64 } = req.body;
 
@@ -58,17 +55,12 @@ router.post('/summarize-pdf', async (req, res) => {
       return res.status(400).json({ error: 'No readable text found in the PDF for summarization.' });
     }
 
-    // Optional: Log extracted text length to see if it's too big
     console.log(`Extracted text from PDF. Length: ${extractedText.length} characters.`);
 
-    // 2. Call Vertex AI (Gemini Pro) for summarization
     const prompt = `Summarize the following document in exactly 4-5 concise lines. Focus on the main purpose, key details (who, what, when, where), and any required actions. Avoid greetings and closings.
     \n\nDocument:\n${extractedText}`;
 
-    // Important: Handle potentially large text for Gemini's context window.
-    // Gemini Pro (gemini-1.0-pro or gemini-pro) has a 32K token context window.
-    // If the PDF is very long, you might hit this limit.
-    // For this example, we'll send it as is, but for production, consider chunking.
+ 
     const result = await generativeModel.generateContent({
         contents: [{ role: 'user', parts: [{ text: prompt }] }]
     });
