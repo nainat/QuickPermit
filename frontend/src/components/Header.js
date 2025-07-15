@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'; // Import useRef
+import React, { useEffect, useState, useRef } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../services/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -9,12 +9,11 @@ const Header = ({ user }) => {
   const [role, setRole] = useState('');
   const [userDetailsFromDb, setUserDetailsFromDb] = useState(null);
   const [showProfilePopup, setShowProfilePopup] = useState(false);
-  const profileRef = useRef(null); // Create a ref for the clickable area
+  const profileRef = useRef(null); 
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (!user?.uid) {
-        // Reset state if user is not available
         setRole('');
         setUserDetailsFromDb(null);
         return;
@@ -53,10 +52,8 @@ const Header = ({ user }) => {
     setShowProfilePopup((prev) => !prev);
   };
 
-  // Close popup when clicked outside
   useEffect(() => {
     const closeOnClickOutside = (e) => {
-      // Check if the click is outside the profile area (which includes the popup itself)
       if (profileRef.current && !profileRef.current.contains(e.target)) {
         setShowProfilePopup(false);
       }
@@ -77,11 +74,9 @@ const Header = ({ user }) => {
       </div>
 
       <div className="header-right">
-        {/* Wrap user info and popup in a div for positioning */}
         <div className="profile-wrapper" ref={profileRef}>
           <div className="user-info" onClick={handleProfileClick}>
             <div className="user-details">
-              {/* Ensure userDetailsFromDb is used for consistency */}
               <span className="user-name">{userDetailsFromDb?.name || user?.displayName || 'User'}</span>
               <span className="user-role">{role?.toUpperCase()}</span>
             </div>
@@ -94,10 +89,8 @@ const Header = ({ user }) => {
             </div>
           </div>
 
-          {/* This is where the popup should be, as a sibling to user-info */}
           {showProfilePopup && userDetailsFromDb && ( // Only show if user details are loaded
             <div className="profile-popup">
-              {/* Fallback to user.email if userDetailsFromDb.email is not set */}
               <p><strong>{userDetailsFromDb?.name || user?.displayName || 'N/A'}</strong></p>
               <p>{userDetailsFromDb?.email || user?.email || 'N/A'}</p>
               <p>{userDetailsFromDb?.role?.toUpperCase() || 'N/A'}</p>
