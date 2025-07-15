@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import React, { useState } from 'react';
 import { auth, db, googleProvider } from '../services/firebase';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
