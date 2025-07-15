@@ -41,7 +41,6 @@ router.post('/summarize-pdf', async (req, res) => {
   }
 
   try {
-    // 1. Extract text from PDF (from Base64 string)
     const base64Pdf = fileBase64.split(';base64,').pop(); // Remove data URI prefix
     if (!base64Pdf) {
       throw new Error("Invalid base64 PDF format. Missing ';base64,' separator or invalid content.");
