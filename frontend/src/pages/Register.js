@@ -1,4 +1,3 @@
-// src/pages/Register.js
 import React, { useState } from 'react';
 import { auth, db, googleProvider } from '../services/firebase';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
