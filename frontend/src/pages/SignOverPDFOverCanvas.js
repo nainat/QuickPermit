@@ -16,15 +16,12 @@ const SignPDFOverCanvas = ({ base64PDF }) => {
 
     const signatureDataUrl = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
 
-    // 1. Load the existing PDF
     const pdfBytes = await fetch(base64PDF).then(res => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(pdfBytes);
 
-    // 2. Embed the signature image
     const pngImageBytes = await fetch(signatureDataUrl).then(res => res.arrayBuffer());
     const pngImage = await pdfDoc.embedPng(pngImageBytes);
 
-    // 3. Draw the image on the first page
     const page = pdfDoc.getPages()[0];
     const { width, height } = page.getSize();
     page.drawImage(pngImage, {
@@ -34,15 +31,12 @@ const SignPDFOverCanvas = ({ base64PDF }) => {
       height: 40,
     });
 
-    // 4. Save the PDF and show or download it
     const modifiedPdfBytes = await pdfDoc.save();
     const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
 
-    // Optional: preview in-browser
     const signedUrl = URL.createObjectURL(blob);
     setSignedPdfUrl(signedUrl);
 
-    // Optional: auto-download
     saveAs(blob, 'signed-letter.pdf');
   };
 
